@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Recipes - Yummy Mummy Kitchen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+        }
+
+        nav {
+            background-color: #ff6b6b;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .search-container {
+            background-color: #f8f8f8;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .search-button {
+            padding: 1rem 1.5rem;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .search-button:hover {
+            background-color: #e05555;
+        }
+
+        .recipe-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .recipe-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .recipe-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .recipe-details {
+            padding: 1.5rem;
+        }
+
+        .recipe-tag {
+            background-color: #ffe4e4;
+            color: #ff6b6b;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .recipe-title {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .recipe-description {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            .search-box {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="recipes.html" class="logo"><i class="fas fa-utensils"></i> Yummy Mummy Kitchen</a>
+            <div class="nav-links">
+                <a href="yummy.html"><i class="fas fa-home"></i> Home</a>
+                <a href="recipes.html"><i class="fas fa-book"></i> Recipes</a>
+                <a href="about.html"><i class="fas fa-info-circle"></i> About</a>
+                <a href="login.html"><i class="fas fa-user"></i> Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search for recipes...">
+            <button class="search-button" onclick="searchRecipe()">Search</button>
+        </div>
+    </div>
+
+    <div class="recipe-grid" id="recipeGrid">
+        <!-- Recipes inserted by JS -->
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Yummy Mummy Kitchen. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const recipes = [
+             {
+        title: "Classic Fluffy Pancakes",
+        tag: "Breakfast",
+        description: "Light and fluffy pancakes made from scratch.",
+        image: "https://images.unsplash.com/photo-1484723091739-30a097e8f929",
+        time: "20 mins",
+        servings: "4 servings",
+        rating: "4.8",
+        ingredients: ["2 cups flour", "2 eggs", "1½ cups milk", "2 tbsp sugar", "1 tsp vanilla", "1 tbsp baking powder"],
+        process: "Mix all ingredients. Pour batter onto hot griddle. Cook until bubbles form, flip, and cook the other side."
+    },
+    {
+        title: "Butter Chicken",
+        tag: "Main Course",
+        description: "Creamy Indian curry with chicken in tomato sauce.",
+        image: "https://images.unsplash.com/photo-1551183053-bf91a1d81141",
+        time: "45 mins",
+        servings: "6 servings",
+        rating: "4.9",
+        ingredients: ["500g chicken", "1 cup yogurt", "2 tsp garam masala", "1 cup tomato puree", "Butter", "Cream"],
+        process: "Marinate chicken. Cook with spices and tomato puree. Add butter and cream, simmer until thick."
+    },
+    {
+        title: "Mediterranean Quinoa Bowl",
+        tag: "Vegetarian",
+        description: "Healthy bowl with quinoa and roasted veggies.",
+        image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c",
+        time: "30 mins",
+        servings: "2 servings",
+        rating: "4.7",
+        ingredients: ["1 cup quinoa", "Roasted veggies", "Chickpeas", "Tahini sauce", "Salt", "Lemon juice"],
+        process: "Cook quinoa. Toss with veggies, chickpeas and dressing. Serve fresh."
+    },
+    {
+        title: "Chicken Biryani",
+        tag: "Main Course",
+        description: "Aromatic basmati rice with marinated chicken and spices.",
+        image: "https://assets.limetray.com/assets/image_manager/uploads/5128/Malamal%20Chicken%20Biryani%20(2).jpg",
+        time: "1 hr",
+        servings: "4 servings",
+        rating: "4.9",
+        ingredients: ["Basmati rice", "Chicken", "Yogurt", "Spices", "Onions", "Saffron"],
+        process: "Marinate chicken. Cook rice separately. Layer and steam cook for aroma."
+    },
+    {
+        title: "Vegetable Pulao",
+        tag: "Main Course",
+        description: "Fragrant rice with mixed vegetables.",
+        image: "https://i.ytimg.com/vi/jj2DDnCmOJ0/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBUe2k7yv1Kc46kRsQYy3-QKlMrHw",
+        time: "30 mins",
+        servings: "3 servings",
+        rating: "4.5",
+        ingredients: ["Rice", "Carrot", "Peas", "Beans", "Spices"],
+        process: "Sauté vegetables and cook with rice and spices."
+    },
+    {
+        title: "Spaghetti Carbonara",
+        tag: "Pasta",
+        description: "Creamy spaghetti with bacon and parmesan.",
+        image: "https://static01.nyt.com/images/2021/02/14/dining/carbonara-horizontal/carbonara-horizontal-jumbo-v2.jpg?quality=75&auto=webp",
+        time: "25 mins",
+        servings: "2 servings",
+        rating: "4.6",
+        ingredients: ["Spaghetti", "Eggs", "Bacon", "Parmesan", "Pepper"],
+        process: "Cook pasta. Mix with eggs, bacon, and cheese off-heat."
+    },
+    {
+        title: "Mutton Rogan Josh",
+        tag: "Main Course",
+        description: "roasted mutton in yogurt-based curry.",
+        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgpvrhP0XQkWl_0Ti2TRumM5D9HKUFLvUeTmvgFqingINqgmu7JqifyCsWyrz3NCUAg-YuqqJ6xPPlp0vpyKyg5C1iXgPrpzpJeptWQWZrfPoeUBQkFmjYeRUuDfUVcgqu9ugI8B5HxmS8/s1600/Mutton+Rogan+Josh+Recipe.JPG",
+        time: "1.5 hrs",
+        servings: "4 servings",
+        rating: "4.8",
+        ingredients: ["Mutton", "Yogurt", "Red chili", "Ginger", "Garlic", "Spices"],
+        process: "Sear mutton and cook slowly in yogurt-based curry."
+    },
+    {
+        title: "Paneer Tikka",
+        tag: "Snack",
+        description: "Grilled spiced paneer cubes.",
+        image: "https://pipingpotcurry.com/wp-content/uploads/2022/09/Haryali-Paneer-Tikka-Piping-Pot-Curry-4.jpg",
+        time: "30 mins",
+        servings: "3 servings",
+        rating: "4.6",
+        ingredients: ["Paneer", "Yogurt", "Spices", "Bell peppers", "Onions"],
+        process: "Marinate and grill paneer and veggies."
+    },
+    {
+        title: "Pizza Margherita",
+        tag: "Snack",
+        description: "Classic Italian pizza with tomato, mozzarella and basil.",
+        image: "https://i.ytimg.com/vi/vafnnbFih3w/maxresdefault.jpg",
+        time: "45 mins",
+        servings: "2 servings",
+        rating: "4.7",
+        ingredients: ["Pizza dough", "Tomato sauce", "Mozzarella", "Basil"],
+        process: "Assemble and bake in a hot oven."
+    },
+    {
+        title: "Aloo Paratha",
+        tag: "Breakfast",
+        description: "Stuffed flatbread with spicy mashed potatoes.",
+        image: "https://www.nehascookbook.com/wp-content/uploads/2021/11/Aloo-methi-paratha-bharela-marcha-WS-1024x576.jpg",
+        time: "35 mins",
+        servings: "3 servings",
+        rating: "4.8",
+        ingredients: ["Wheat flour", "Potatoes", "Spices", "Ghee"],
+        process: "Stuff mashed potatoes in dough, roll, and cook on tawa."
+    },
+    {
+        title: "Chole Bhature",
+        tag: "Main Course",
+        description: "Punjabi chickpea curry with fluffy fried bread.",
+        image: "https://bluenilekitchen.com/wp-content/uploads/2024/08/IMG_0208-scaled.jpg",
+        time: "1 hr",
+        servings: "4 servings",
+        rating: "4.9",
+        ingredients: ["Chickpeas", "Tomatoes", "Onion", "Spices", "Flour"],
+        process: "Cook chole in gravy, serve with fried bhature."
+    },
+    {
+        title: "Veg Fried Rice",
+        tag: "Main Course",
+        description: "Chinese-style stir-fried rice with vegetables.",
+        image: "https://images.squarespace-cdn.com/content/v1/532ddd31e4b00cf211b5741c/9ead5668-656b-49b9-83a0-df5a13095bcc/Photo+2023-09-29%2C+12+53+01+PM.jpg?format=2500w",
+        time: "20 mins",
+        servings: "2 servings",
+        rating: "4.5",
+        ingredients: ["Rice", "Carrots", "Beans", "Soy sauce", "Spring onions"],
+        process: "Stir-fry vegetables and mix with rice."
+    },
+    {
+        title: "Gulab Jamun",
+        tag: "Dessert",
+        description: "Milk-solid balls soaked in sugar syrup.",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQwCf3I5CLN_z2FvL94VpvkR_zpOinYDxx3w&s",
+        time: "40 mins",
+        servings: "10 pieces",
+        rating: "4.9",
+        ingredients: ["Khoya", "Flour", "Sugar", "Cardamom", "Rose water"],
+        process: "Make dough, fry balls, and soak in syrup."
+    },
+    {
+        title: "Chocolate Brownies",
+        tag: "Dessert",
+        description: "Fudgy and rich chocolate brownies.",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYCl2rwah3L7aHZ5qWFCtbwxQrCobmXr79bA&s",
+        time: "35 mins",
+        servings: "6 servings",
+        rating: "4.8",
+        ingredients: ["Chocolate", "Butter", "Flour", "Sugar", "Eggs"],
+        process: "Mix ingredients and bake until set."
+    },
+    {
+        title: "Mango Lassi",
+        tag: "Beverage",
+        description: "Sweet mango yogurt smoothie.",
+        image: "https://aroundtheyum.com/wp-content/uploads/2024/09/mango-lassi-recipe.jpg",
+        time: "10 mins",
+        servings: "2 servings",
+        rating: "4.7",
+        ingredients: ["Mango", "Yogurt", "Sugar", "Cardamom", "Ice"],
+        process: "Blend all ingredients and serve chilled."
+    },
+    {
+
+    
+
+ 
+        title: "Rava Upma",
+        tag: "Breakfast",
+        description: "Savory South Indian semolina porridge.",
+        image: "https://simpleindianmeals.com/wp-content/uploads/2014/02/Rava-Upma.jpg",
+        time: "20 mins",
+        servings: "2 servings",
+        rating: "4.5",
+        ingredients: ["Semolina", "Mustard seeds", "Curry leaves", "Veggies"],
+        process: "Roast rava, cook with water and tempered veggies."
+},
+       {
+         title: "Chicken Kabab",
+        tag: "Snack",
+        description: "Juicy grilled chicken skewers.",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAda2Du80y4YjH2dC3LevV7CSYOx3hBAECmQ&s",
+        time: "40 mins",
+        servings: "4 servings",
+        rating: "4.7",
+        ingredients: ["Chicken", "Yogurt", "Spices", "Lemon juice"],
+        process: "Marinate and grill chicken until charred."
+    },
+    {
+        title: "Fruit Salad",
+        tag: "Dessert",
+        description: "Colorful mix of seasonal fruits.",
+        image:"https://supperinthesuburbs.com/wp-content/uploads/2022/06/Summer-Fruit-Salad-with-Yogurt-Dressing.jpeg",
+        time: "10 mins",
+        servings: "3 servings",
+        rating: "4.4",
+        ingredients: ["Fruits", "Honey", "Mint", "Lime juice"],
+        process: "Chop fruits and toss with dressing."
+    },
+    {
+        title: "Tandoori Roti",
+        tag: "Side",
+        description: "Whole wheat flatbread cooked in tandoor.",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5RvoW4qP5JcMmrIZpU9yUJOgQtII6p4F06g&s",
+        time: "25 mins",
+        servings: "5 servings",
+        rating: "4.6",
+        ingredients: ["Wheat flour", "Salt", "Water", "Ghee"],
+        process: "Make dough, roll, and cook on tandoor or oven."
+    },
+    {
+        title: "Cucumber Raita",
+        tag: "Side",
+        description: "Cooling yogurt dip with cucumber.",
+        image: "https://rumkisgoldenspoon.com/wp-content/uploads/2022/06/Cucumber-raita-recipe.jpg",
+        time: "10 mins",
+        servings: "2 servings",
+        rating: "4.5",
+        ingredients: ["Yogurt", "Cucumber", "Salt", "Cumin"],
+        process: "Grate cucumber, mix with yogurt and seasoning."
+    }
+];
+
+        const grid = document.getElementById("recipeGrid");
+
+        function displayRecipes(list) {
+            grid.innerHTML = "";
+            list.forEach((recipe, index) => {
+                const card = document.createElement("div");
+                card.className = "recipe-card";
+                card.innerHTML = `
+                    <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image" />
+                    <div class="recipe-details">
+                        <span class="recipe-tag">${recipe.tag}</span>
+                        <h3 class="recipe-title">${recipe.title}</h3>
+                        <p class="recipe-description">${recipe.description}</p>
+                    </div>
+                `;
+                card.onclick = () => viewRecipe(index);
+                grid.appendChild(card);
+            });
+        }
+
+        function viewRecipe(index) {
+            localStorage.setItem("selectedRecipe", JSON.stringify(recipes[index]));
+            window.location.href = "recipe-details.html";
+        }
+
+        function searchRecipe() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const result = recipes.find(r => r.title.toLowerCase().includes(query));
+            if (result) {
+                localStorage.setItem("selectedRecipe", JSON.stringify(result));
+                window.location.href = "recipe-details.html";
+            } else {
+                alert("Recipe not found!");
+            }
+        }
+
+        // Initialize
+        displayRecipes(recipes.slice(0,4));
+    </script>
+</body>
+</html>
